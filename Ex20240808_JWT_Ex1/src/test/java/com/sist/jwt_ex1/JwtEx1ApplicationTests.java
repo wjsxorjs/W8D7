@@ -72,8 +72,19 @@ class JwtEx1ApplicationTests {
 		String accessToken = jwtProvider.genToken(claims, 60*60*24*10); //10일
 		System.out.println("!!!!!!!!!!!!!AccessToken: "+accessToken);
 
-
 		assertThat(accessToken).isNotNull();
+	}
+
+	@Test
+	@DisplayName("만료여부 테스트")
+	void tokenExpireTest(){
+		Map<String,Object> claims = new HashMap<>();
+		claims.put("id", "jane2");
+		claims.put("name", "Jane");
+		claims.put("email", "JaneEsther@email.com");
+
+		String accessToken = jwtProvider.genToken(claims, -1); // 만료된 토큰
+		assertThat(jwtProvider.verify(accessToken)).isFalse();
 	}
 
 }

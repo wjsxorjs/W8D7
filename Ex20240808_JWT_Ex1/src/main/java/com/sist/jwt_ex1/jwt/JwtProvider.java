@@ -54,4 +54,33 @@ public class JwtProvider{
                          .compact(); // 개인정보가 저장된 builder로
                                      // Token 발행
     }
+
+    // 토큰 유효기간 확인
+    public boolean verify(String token){
+        boolean value = true;
+
+        try {
+            Jwts.parser()
+                .verifyWith(getSecretKey())
+                .build()
+                .parseSignedClaims(token); //기간만료시 예외발생
+        } catch (Exception e) {
+            // 유효기간이 지났다는 뜻
+            value = false;
+        }
+
+        return value;
+    }
+
+
+    // 토큰에 담긴 사용자정보(claims) 반환
+    public Map<String, Object> getClaims(String token){
+        return  Jwts.parser()
+                    .verifyWith(getSecretKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+    }
+
+
 }
