@@ -3,6 +3,8 @@ package com.sist.jwt_ex1;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.crypto.SecretKey;
 
@@ -57,6 +59,21 @@ class JwtEx1ApplicationTests {
 
 		assertThat(sk2 == sk1).isTrue(); // 주소값도 비교. 실제 같은 객체인지 비교
 		// assertThat(sk2).isEqualTo(sk1); // 이건 value로 값만 비교
+	}
+
+	@Test
+	@DisplayName("jwtProvider token 발행 기능 테스트")
+	void tokenTest(){
+		Map<String,Object> claims = new HashMap<>();
+		claims.put("id", "jack1");
+		claims.put("name", "Jack");
+		claims.put("email", "JackEsther@email.com");
+
+		String accessToken = jwtProvider.genToken(claims, 60*60*24*10); //10일
+		System.out.println("!!!!!!!!!!!!!AccessToken: "+accessToken);
+
+
+		assertThat(accessToken).isNotNull();
 	}
 
 }
